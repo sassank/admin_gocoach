@@ -6,6 +6,8 @@ import 'profile_page.dart';
 import '../theme_provider.dart';
 import '../locale_provider.dart';
 import '../l10n.dart';
+import '../notification_item.dart';
+import '../push_notification_service.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -23,6 +25,42 @@ class _DashboardPageState extends State<DashboardPage> {
     UsersPage(),
     EventsPage(),
   ];
+
+  // Méthode pour afficher les notifications
+  void _showNotifications(BuildContext context) {
+    final pushNotificationService = Provider.of<PushNotificationService>(context, listen: false);
+    final notifications = pushNotificationService.getNotifications();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Notifications"),
+          content: Container(
+            width: double.maxFinite,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: notifications.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  title: Text(notifications[index].title),
+                  subtitle: Text(notifications[index].message),
+                );
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Fermer"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +126,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           contentPadding:
                           EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
                           suffixIcon: Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.teal,
                               borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(8.0),
@@ -96,7 +134,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               ),
                             ),
                             child: IconButton(
-                              icon: Icon(Icons.search, color: Colors.white),
+                              icon: const Icon(Icons.search, color: Colors.white),
                               onPressed: () {
                                 // Handle search action
                               },
@@ -113,9 +151,7 @@ class _DashboardPageState extends State<DashboardPage> {
               IconButton(
                 icon: Icon(Icons.notifications,
                     color: isDarkMode ? Colors.white : Colors.black),
-                onPressed: () {
-                  // Handle notifications
-                },
+                onPressed: () => _showNotifications(context),
               ),
               PopupMenuButton<Locale>(
                 icon: Icon(Icons.language,

@@ -1,12 +1,21 @@
+import 'package:admin_panel_gocoach/push_notification_service.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
+import 'firebase_options.dart';
 import 'pages/login_page.dart';
 import 'theme_provider.dart';
 import 'locale_provider.dart';
 import 'l10n.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  final pushNotificationService = PushNotificationService();
+  await pushNotificationService.initialise();
   runApp(
     MultiProvider(
       providers: [
