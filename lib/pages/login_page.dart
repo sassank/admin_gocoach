@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter username and password')),
+        SnackBar(content: Text('Veuillez saisir vos identifiants')),
       );
     }
   }
@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 60.0), // Extra space to move text higher
+                  SizedBox(height: 10),
                   // Title
                   Text(
                     "Administration de l'application",
@@ -62,12 +62,12 @@ class _LoginPageState extends State<LoginPage> {
                       shadows: [
                         Shadow(
                           offset: Offset(1.0, 1.0),
-                          blurRadius: 3.0,
+                          blurRadius: 7.0,
                           color: Color.fromARGB(128, 0, 0, 0),
                         ),
                         Shadow(
                           offset: Offset(1.0, 1.0),
-                          blurRadius: 5.0,
+                          blurRadius: 18.0,
                           color: Color.fromARGB(128, 0, 0, 0),
                         ),
                         Shadow(
@@ -79,17 +79,17 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 40.0),
+                  SizedBox(height: 30.0),
                   // Logo
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
                     child: Image.asset(
                       "assets/images/gocoach.png",
-                      height: 150,
-                      width: 150,
+                      height: 100,
+                      width: 100,
                     ),
                   ),
-                  SizedBox(height: 40.0),
+                  SizedBox(height: 30.0),
                   // Username field
                   Container(
                     width: 300,
@@ -97,16 +97,16 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _usernameController,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.person),
-                        labelText: 'Utilisateur',
+                        labelText: 'Email',
                         filled: true,
                         fillColor: Colors.white,
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFF1d9172)),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black54),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
                     ),
@@ -124,11 +124,11 @@ class _LoginPageState extends State<LoginPage> {
                         fillColor: Colors.white,
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFF1d9172)),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.black54),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
                       obscureText: true,
@@ -145,12 +145,36 @@ class _LoginPageState extends State<LoginPage> {
                         foregroundColor: Colors.white,
                         backgroundColor: Color(0xFF1d9172), // Button color
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                         padding: EdgeInsets.symmetric(vertical: 16),
                         textStyle: TextStyle(fontSize: 18),
                       ),
                     ),
+                  ),
+                  SizedBox(height: 16),
+                  // Register and forgot password
+                  Column(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          // Handle registration
+                        },
+                        child: Text(
+                          "Vous n'avez pas de compte ?",
+                          style: TextStyle(color: Color(0xFF1d9172)),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // Handle password reset
+                        },
+                        child: Text(
+                          "Mot de passe oublié",
+                          style: TextStyle(color: Color(0xFF1d9172)),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
