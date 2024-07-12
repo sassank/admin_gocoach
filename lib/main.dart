@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Admin Panel GoCoach',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Color(0x5ADEFFE1), // Set the background color here
+        primarySwatch: Colors.teal,
+        scaffoldBackgroundColor: Color(0xFF8CD7C6), // Set the background color here
       ),
       home: LoginPage(),
       routes: {

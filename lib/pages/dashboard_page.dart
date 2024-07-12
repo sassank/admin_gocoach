@@ -31,7 +31,7 @@ class _DashboardPageState extends State<DashboardPage> {
             backgroundColor: Colors.teal,
             unselectedIconTheme: IconThemeData(color: Colors.white, opacity: 1),
             unselectedLabelTextStyle: TextStyle(color: Colors.white),
-            selectedIconTheme: IconThemeData(color: Colors.blue.shade900),
+            selectedIconTheme: IconThemeData(color: Colors.teal),
             destinations: [
               NavigationRailDestination(
                 icon: Icon(Icons.dashboard),
@@ -74,7 +74,7 @@ class HomeContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Pannel d'administration de l'application GoCoach",
+            "Bienvenue sur le pannel d'administration de l'application GoCoach",
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
