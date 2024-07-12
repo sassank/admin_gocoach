@@ -1,3 +1,4 @@
+// lib/pages/dashboard_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'users_page.dart';
@@ -6,11 +7,9 @@ import 'profile_page.dart';
 import '../theme_provider.dart';
 import '../locale_provider.dart';
 import '../l10n.dart';
-import '../notification_item.dart';
-import '../push_notification_service.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+  const DashboardPage({super.key});
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();
@@ -19,48 +18,13 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   bool isExpanded = false;
   int selectedIndex = 0;
+  String searchQuery = '';
 
   final List<Widget> _pages = [
-    HomeContent(),
-    UsersPage(),
-    EventsPage(),
+    DashboardContent(), // Remplacer HomeContent par DashboardContent
+    UsersPage(searchQuery: ''), // Passer une valeur par défaut
+    EventsPage(searchQuery: ''), // Passer une valeur par défaut
   ];
-
-  // Méthode pour afficher les notifications
-  void _showNotifications(BuildContext context) {
-    final pushNotificationService = Provider.of<PushNotificationService>(context, listen: false);
-    final notifications = pushNotificationService.getNotifications();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Notifications"),
-          content: Container(
-            width: double.maxFinite,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: notifications.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text(notifications[index].title),
-                  subtitle: Text(notifications[index].message),
-                );
-              },
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("Fermer"),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +37,7 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           Container(
             color: isDarkMode ? Colors.black : Colors.white,
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
             child: Center(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -112,6 +76,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     child: Center(
                       child: TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            searchQuery = value;
+                          });
+                        },
                         decoration: InputDecoration(
                           hintText: "Rechercher un abonné ou une activité",
                           hintStyle: TextStyle(
@@ -151,7 +120,9 @@ class _DashboardPageState extends State<DashboardPage> {
               IconButton(
                 icon: Icon(Icons.notifications,
                     color: isDarkMode ? Colors.white : Colors.black),
-                onPressed: () => _showNotifications(context),
+                onPressed: () {
+                  // Handle notifications
+                },
               ),
               PopupMenuButton<Locale>(
                 icon: Icon(Icons.language,
@@ -198,7 +169,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   unselectedIconTheme: IconThemeData(color: Colors.white),
                   unselectedLabelTextStyle: TextStyle(color: Colors.white),
                   selectedIconTheme: IconThemeData(color: Colors.teal),
-                  destinations: [
+                  destinations: const [
                     NavigationRailDestination(
                       icon: Icon(Icons.dashboard),
                       label: Text("Dashboard"),
@@ -222,7 +193,18 @@ class _DashboardPageState extends State<DashboardPage> {
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.all(16.0),
-                    child: _pages[selectedIndex],
+                    child: IndexedStack(
+                      index: selectedIndex,
+                      children: _pages.map((page) {
+                        if (page is UsersPage) {
+                          return UsersPage(searchQuery: searchQuery);
+                        } else if (page is EventsPage) {
+                          return EventsPage(searchQuery: searchQuery);
+                        } else {
+                          return page;
+                        }
+                      }).toList(),
+                    ),
                   ),
                 ),
               ],
@@ -234,10 +216,10 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 }
 
-class HomeContent extends StatelessWidget {
+class DashboardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return const SingleChildScrollView(
       child: Wrap(
         spacing: 20.0, // Espace horizontal entre les cartes
         runSpacing: 20.0, // Espace vertical entre les cartes
@@ -247,7 +229,7 @@ class HomeContent extends StatelessWidget {
             width: 300,
             child: Card(
               child: Padding(
-                padding: const EdgeInsets.all(18.0),
+                padding: EdgeInsets.all(18.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -281,7 +263,7 @@ class HomeContent extends StatelessWidget {
             width: 300,
             child: Card(
               child: Padding(
-                padding: const EdgeInsets.all(18.0),
+                padding: EdgeInsets.all(18.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -317,7 +299,7 @@ class HomeContent extends StatelessWidget {
             width: 300,
             child: Card(
               child: Padding(
-                padding: const EdgeInsets.all(18.0),
+                padding: EdgeInsets.all(18.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -353,7 +335,7 @@ class HomeContent extends StatelessWidget {
             width: 300,
             child: Card(
               child: Padding(
-                padding: const EdgeInsets.all(18.0),
+                padding: EdgeInsets.all(18.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
