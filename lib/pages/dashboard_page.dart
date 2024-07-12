@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'users_page.dart';
 import 'events_page.dart';
 import 'profile_page.dart';
-import 'login_page.dart';
+import '../theme_provider.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -23,18 +24,21 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    bool isDarkMode = themeProvider.isDarkMode;
+
     return Scaffold(
       body: Column(
         children: [
           Container(
-            color: Colors.white,
+            color: isDarkMode ? Colors.black : Colors.white,
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
             child: Center(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(50.0),
+                    borderRadius: BorderRadius.circular(40.0),
                     child: Image.asset(
                       'assets/images/gocoach.png',
                       height: 45,
@@ -43,7 +47,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   SizedBox(width: 5),
                   Text(
                     'Administration GoCoach',
-                    style: TextStyle(color: Colors.black87, fontSize: 25),
+                    style: TextStyle(
+                      color: isDarkMode ? Colors.white : Colors.black87,
+                      fontSize: 25,
+                    ),
                   ),
                 ],
               ),
@@ -51,7 +58,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           AppBar(
             toolbarHeight: 85,
-            backgroundColor: Colors.white,
+            backgroundColor: isDarkMode ? Colors.grey[850] : Colors.white,
             title: Row(
               children: [
                 SizedBox(width: 10),
@@ -59,19 +66,20 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: isDarkMode ? Colors.grey[800] : Colors.grey[200],
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Center(
                       child: TextField(
                         decoration: InputDecoration(
                           hintText: "Rechercher un abboné ou une activité",
+                          hintStyle: TextStyle(color: isDarkMode ? Colors.white54 : Colors.black54),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8.0),
                             borderSide: BorderSide.none,
                           ),
                           filled: true,
-                          fillColor: Colors.grey[200],
+                          fillColor: isDarkMode ? Colors.grey[800] : Colors.grey[200],
                           contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
                           suffixIcon: Container(
                             decoration: BoxDecoration(
@@ -97,25 +105,25 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             actions: [
               IconButton(
-                icon: Icon(Icons.notifications, color: Colors.black),
+                icon: Icon(Icons.notifications, color: isDarkMode ? Colors.white : Colors.black),
                 onPressed: () {
                   // Handle notifications
                 },
               ),
               IconButton(
-                icon: Icon(Icons.language, color: Colors.black),
+                icon: Icon(Icons.language, color: isDarkMode ? Colors.white : Colors.black),
                 onPressed: () {
                   // Handle language change
                 },
               ),
               IconButton(
-                icon: Icon(Icons.brightness_6, color: Colors.black),
+                icon: Icon(Icons.brightness_6, color: isDarkMode ? Colors.white : Colors.black),
                 onPressed: () {
-                  // Handle theme change
+                  themeProvider.toggleTheme();
                 },
               ),
               IconButton(
-                icon: Icon(Icons.account_circle, color: Colors.black),
+                icon: Icon(Icons.account_circle, color: isDarkMode ? Colors.white : Colors.black),
                 onPressed: () {
                   Navigator.push(
                     context,
