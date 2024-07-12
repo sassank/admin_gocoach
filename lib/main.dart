@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'pages/dashboard_page.dart';
-import 'pages/users_page.dart';
-import 'pages/events_page.dart';
 import 'pages/login_page.dart';
 
 void main() {
@@ -12,17 +9,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Admin Panel',
+      title: 'GoCoach Admin Panel',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.teal,
       ),
+      debugShowCheckedModeBanner: false, // Désactiver le bandeau DEBUG
       home: LoginPage(),
-      routes: {
-        '/dashboard': (context) => DashboardPage(),
-        '/users': (context) => UsersPage(),
-        '/events': (context) => EventsPage(),
-        '/login': (context) => LoginPage(),
-      },
     );
   }
 }
