@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'users_page.dart';
 import 'events_page.dart';
+import 'profile_page.dart';
 import 'login_page.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -48,7 +49,10 @@ class _DashboardPageState extends State<DashboardPage> {
           IconButton(
             icon: Icon(Icons.account_circle, color: Colors.black),
             onPressed: () {
-              // Handle profile
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
             },
           ),
         ],
@@ -58,9 +62,9 @@ class _DashboardPageState extends State<DashboardPage> {
           NavigationRail(
             extended: isExpanded,
             backgroundColor: Color(0xFF1d9172),
-            unselectedIconTheme: IconThemeData(color: Colors.white, opacity: 1),
+            unselectedIconTheme: IconThemeData(color: Colors.white),
             unselectedLabelTextStyle: TextStyle(color: Colors.white),
-            selectedIconTheme: IconThemeData(color: Colors.tealAccent),
+            selectedIconTheme: IconThemeData(color: Colors.teal),
             destinations: [
               NavigationRailDestination(
                 icon: Icon(Icons.dashboard),
