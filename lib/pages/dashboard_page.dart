@@ -4,6 +4,8 @@ import 'users_page.dart';
 import 'events_page.dart';
 import 'profile_page.dart';
 import '../theme_provider.dart';
+import '../locale_provider.dart';
+import '../l10n.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -25,6 +27,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
     bool isDarkMode = themeProvider.isDarkMode;
 
     return Scaffold(
@@ -38,18 +41,18 @@ class _DashboardPageState extends State<DashboardPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(40.0),
+                    borderRadius: BorderRadius.circular(50.0),
                     child: Image.asset(
                       'assets/images/gocoach.png',
-                      height: 45,
+                      height: 50,
                     ),
                   ),
                   SizedBox(width: 5),
                   Text(
-                    'Administration GoCoach',
+                    ' GoCoach Admin',
                     style: TextStyle(
                       color: isDarkMode ? Colors.white : Colors.black87,
-                      fontSize: 25,
+                      fontSize: 28,
                     ),
                   ),
                 ],
@@ -57,7 +60,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ),
           AppBar(
-            toolbarHeight: 85,
+            toolbarHeight: 80,
             backgroundColor: isDarkMode ? Colors.grey[850] : Colors.white,
             title: Row(
               children: [
@@ -72,15 +75,18 @@ class _DashboardPageState extends State<DashboardPage> {
                     child: Center(
                       child: TextField(
                         decoration: InputDecoration(
-                          hintText: "Rechercher un abboné ou une activité",
-                          hintStyle: TextStyle(color: isDarkMode ? Colors.white54 : Colors.black54),
+                          hintText: "Rechercher un abonné ou une activité",
+                          hintStyle: TextStyle(
+                            color: isDarkMode ? Colors.white54 : Colors.black54,
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8.0),
                             borderSide: BorderSide.none,
                           ),
                           filled: true,
                           fillColor: isDarkMode ? Colors.grey[800] : Colors.grey[200],
-                          contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                          contentPadding:
+                          EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
                           suffixIcon: Container(
                             decoration: BoxDecoration(
                               color: Colors.teal,
@@ -105,25 +111,39 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             actions: [
               IconButton(
-                icon: Icon(Icons.notifications, color: isDarkMode ? Colors.white : Colors.black),
+                icon: Icon(Icons.notifications,
+                    color: isDarkMode ? Colors.white : Colors.black),
                 onPressed: () {
                   // Handle notifications
                 },
               ),
-              IconButton(
-                icon: Icon(Icons.language, color: isDarkMode ? Colors.white : Colors.black),
-                onPressed: () {
-                  // Handle language change
+              PopupMenuButton<Locale>(
+                icon: Icon(Icons.language,
+                    color: isDarkMode ? Colors.white : Colors.black),
+                onSelected: (Locale locale) {
+                  localeProvider.setLocale(locale);
+                },
+                itemBuilder: (BuildContext context) {
+                  return L10n.all.map((Locale locale) {
+                    return PopupMenuItem<Locale>(
+                      value: locale,
+                      child: Text(
+                        L10n.getSupportedLanguages()[locale.languageCode]!,
+                      ),
+                    );
+                  }).toList();
                 },
               ),
               IconButton(
-                icon: Icon(Icons.brightness_6, color: isDarkMode ? Colors.white : Colors.black),
+                icon: Icon(Icons.brightness_6,
+                    color: isDarkMode ? Colors.white : Colors.black),
                 onPressed: () {
                   themeProvider.toggleTheme();
                 },
               ),
               IconButton(
-                icon: Icon(Icons.account_circle, color: isDarkMode ? Colors.white : Colors.black),
+                icon: Icon(Icons.account_circle,
+                    color: isDarkMode ? Colors.white : Colors.black),
                 onPressed: () {
                   Navigator.push(
                     context,
