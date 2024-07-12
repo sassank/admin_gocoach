@@ -24,72 +24,144 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text('Administration GoCoach', style: TextStyle(color: Colors.black)),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.notifications, color: Colors.black),
-            onPressed: () {
-              // Handle notifications
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.language, color: Colors.black),
-            onPressed: () {
-              // Handle language change
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.brightness_6, color: Colors.black),
-            onPressed: () {
-              // Handle theme change
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.account_circle, color: Colors.black),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage()),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Row(
+      body: Column(
         children: [
-          NavigationRail(
-            extended: isExpanded,
-            backgroundColor: Color(0xFF1d9172),
-            unselectedIconTheme: IconThemeData(color: Colors.white),
-            unselectedLabelTextStyle: TextStyle(color: Colors.white),
-            selectedIconTheme: IconThemeData(color: Colors.teal),
-            destinations: [
-              NavigationRailDestination(
-                icon: Icon(Icons.dashboard),
-                label: Text("Dashboard"),
+          Container(
+            color: Colors.white,
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50.0),
+                    child: Image.asset(
+                      'assets/images/gocoach.png',
+                      height: 45,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    'Administration GoCoach',
+                    style: TextStyle(color: Colors.black87, fontSize: 25),
+                  ),
+                ],
               ),
-              NavigationRailDestination(
-                icon: Icon(Icons.people),
-                label: Text("Clients"),
+            ),
+          ),
+          AppBar(
+            toolbarHeight: 85,
+            backgroundColor: Colors.white,
+            title: Row(
+              children: [
+                SizedBox(width: 10),
+                Expanded(
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Center(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: "Rechercher un abboné ou une activité",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                          suffixIcon: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.teal,
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(8.0),
+                                bottomRight: Radius.circular(8.0),
+                              ),
+                            ),
+                            child: IconButton(
+                              icon: Icon(Icons.search, color: Colors.white),
+                              onPressed: () {
+                                // Handle search action
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.notifications, color: Colors.black),
+                onPressed: () {
+                  // Handle notifications
+                },
               ),
-              NavigationRailDestination(
-                icon: Icon(Icons.fitness_center),
-                label: Text("Sessions"),
+              IconButton(
+                icon: Icon(Icons.language, color: Colors.black),
+                onPressed: () {
+                  // Handle language change
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.brightness_6, color: Colors.black),
+                onPressed: () {
+                  // Handle theme change
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.account_circle, color: Colors.black),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfilePage()),
+                  );
+                },
               ),
             ],
-            selectedIndex: selectedIndex,
-            onDestinationSelected: (int index) {
-              setState(() {
-                selectedIndex = index;
-              });
-            },
           ),
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: _pages[selectedIndex],
+            child: Row(
+              children: [
+                NavigationRail(
+                  extended: isExpanded,
+                  backgroundColor: Color(0xFF1d9172),
+                  unselectedIconTheme: IconThemeData(color: Colors.white),
+                  unselectedLabelTextStyle: TextStyle(color: Colors.white),
+                  selectedIconTheme: IconThemeData(color: Colors.teal),
+                  destinations: [
+                    NavigationRailDestination(
+                      icon: Icon(Icons.dashboard),
+                      label: Text("Dashboard"),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.people),
+                      label: Text("Clients"),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.fitness_center),
+                      label: Text("Sessions"),
+                    ),
+                  ],
+                  selectedIndex: selectedIndex,
+                  onDestinationSelected: (int index) {
+                    setState(() {
+                      selectedIndex = index;
+                    });
+                  },
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: _pages[selectedIndex],
+                  ),
+                ),
+              ],
             ),
           ),
         ],
