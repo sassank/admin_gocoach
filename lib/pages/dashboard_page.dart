@@ -28,7 +28,7 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           NavigationRail(
             extended: isExpanded,
-            backgroundColor: Colors.blue.shade700,
+            backgroundColor: Colors.teal,
             unselectedIconTheme: IconThemeData(color: Colors.white, opacity: 1),
             unselectedLabelTextStyle: TextStyle(color: Colors.white),
             selectedIconTheme: IconThemeData(color: Colors.blue.shade900),
