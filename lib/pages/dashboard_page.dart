@@ -1,12 +1,13 @@
-// lib/pages/dashboard_page.dart
+import 'package:admin_panel_gocoach/pages/events_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'users_page.dart';
-import 'events_page.dart';
 import 'profile_page.dart';
+import 'sessions_calendar_page.dart';
 import '../theme_provider.dart';
 import '../locale_provider.dart';
 import '../l10n.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -21,9 +22,10 @@ class _DashboardPageState extends State<DashboardPage> {
   String searchQuery = '';
 
   final List<Widget> _pages = [
-    const DashboardContent(), // Replace HomeContent par DashboardContent
-    const UsersPage(searchQuery: ''), // Passer une valeur par défaut
-    const EventsPage(searchQuery: ''), // Passer une valeur par défaut
+    const DashboardContent(),
+    const UsersPage(searchQuery: ''),
+    const EventsPage(searchQuery: ''),
+    const SessionsCalendarPage(),
   ];
 
   @override
@@ -176,11 +178,15 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     NavigationRailDestination(
                       icon: Icon(Icons.people),
-                      label: Text("Clients"),
+                      label: Text("Abbonnés"),
                     ),
                     NavigationRailDestination(
                       icon: Icon(Icons.fitness_center),
                       label: Text("Sessions"),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.calendar_today),
+                      label: Text("Planning"),
                     ),
                   ],
                   selectedIndex: selectedIndex,
@@ -221,13 +227,13 @@ class DashboardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
+    return SingleChildScrollView(
       child: Wrap(
         spacing: 20.0, // Espace horizontal entre les cartes
         runSpacing: 20.0, // Espace vertical entre les cartes
         alignment: WrapAlignment.start, // Alignement des éléments en haut
         children: [
-          SizedBox(
+          const SizedBox(
             width: 300,
             child: Card(
               child: Padding(
@@ -261,7 +267,7 @@ class DashboardContent extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 300,
             child: Card(
               child: Padding(
@@ -297,7 +303,7 @@ class DashboardContent extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 300,
             child: Card(
               child: Padding(
@@ -334,43 +340,52 @@ class DashboardContent extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 300,
-            child: Card(
-              child: Padding(
-                padding: EdgeInsets.all(18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.attach_money, size: 26.0, color: Colors.green),
-                        SizedBox(width: 15.0),
-                        Text(
-                          "Revenue",
-                          style: TextStyle(
-                            fontSize: 26.0,
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 20.0),
-                    Text(
-                      "2,300 \$",
-                      style: TextStyle(
-                        fontSize: 36,
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                ),
-              ),
+            width: double.infinity,
+            height: 400,
+            child: SfCartesianChart(
+              primaryXAxis: CategoryAxis(),
+              title: ChartTitle(text: 'Nouveaux abonnés mensuels'),
+              legend: Legend(isVisible: true),
+              tooltipBehavior: TooltipBehavior(enable: true),
+              series: <ChartSeries<_SubscriberData, String>>[
+                ColumnSeries<_SubscriberData, String>(
+                  dataSource: _getSubscriberData(),
+                  xValueMapper: (_SubscriberData data, _) => data.month,
+                  yValueMapper: (_SubscriberData data, _) => data.subscribers,
+                  name: 'Abonnés',
+                  color: Colors.teal,
+                  dataLabelSettings: const DataLabelSettings(isVisible: true),
+                )
+              ],
             ),
           ),
         ],
       ),
     );
   }
+
+  List<_SubscriberData> _getSubscriberData() {
+    final List<_SubscriberData> data = [
+      _SubscriberData('Jan', 30),
+      _SubscriberData('Fev', 40),
+      _SubscriberData('Mar', 35),
+      _SubscriberData('Avr', 50),
+      _SubscriberData('Mai', 70),
+      _SubscriberData('Juin', 60),
+      _SubscriberData('Juil', 80),
+      _SubscriberData('Août', 90),
+      _SubscriberData('Sept', 85),
+      _SubscriberData('Oct', 100),
+      _SubscriberData('Nov', 95),
+      _SubscriberData('Déc', 120),
+    ];
+    return data;
+  }
+}
+
+class _SubscriberData {
+  _SubscriberData(this.month, this.subscribers);
+
+  final String month;
+  final int subscribers;
 }

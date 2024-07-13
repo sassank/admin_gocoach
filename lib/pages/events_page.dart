@@ -12,14 +12,14 @@ class EventsPage extends StatefulWidget {
 
 class EventsPageState extends State<EventsPage> {
   List<Event> events = [
-    Event(title: 'Yoga Session', description: 'A relaxing yoga session', date: DateTime.now().add(const Duration(days: 1))),
-    Event(title: 'Workout series', description: 'High-intensity interval training', date: DateTime.now().add(const Duration(days: 2))),
-    Event(title: 'Strength Training', description: 'Build muscle strength', date: DateTime.now().add(const Duration(days: 3))),
+    Event(title: 'Séance de Yoga', description: 'Une séance de yoga relaxante', date: DateTime.now().add(const Duration(days: 1))),
+    Event(title: 'Série d\'entraînements', description: 'Entraînement par intervalles à haute intensité', date: DateTime.now().add(const Duration(days: 2))),
+    Event(title: 'Entraînement de force', description: 'Développer la force musculaire', date: DateTime.now().add(const Duration(days: 3))),
   ];
 
   void _addEvent() {
     setState(() {
-      events.add(Event(title: 'New Event', description: '', date: DateTime.now()));
+      events.add(Event(title: 'Nouvel événement', description: '', date: DateTime.now()));
     });
   }
 
@@ -30,9 +30,28 @@ class EventsPageState extends State<EventsPage> {
   }
 
   void _deleteEvent(int index) {
-    setState(() {
-      events.removeAt(index);
-    });
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmer la suppression'),
+        content: const Text('Êtes-vous sûr de vouloir supprimer cet événement ?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                events.removeAt(index);
+              });
+              Navigator.of(context).pop();
+            },
+            child: const Text('Supprimer'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -73,6 +92,7 @@ class EventsPageState extends State<EventsPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'eventsPageFab', // Add a unique heroTag here
         onPressed: _addEvent,
         backgroundColor: Colors.teal,
         shape: const RoundedRectangleBorder(
@@ -92,13 +112,13 @@ class EventsPageState extends State<EventsPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Edit Event'),
+          title: const Text('Modifier l\'événement'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: titleController,
-                decoration: const InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Titre'),
               ),
               TextField(
                 controller: descriptionController,
@@ -126,10 +146,16 @@ class EventsPageState extends State<EventsPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: const Text('Annuler'),
             ),
             TextButton(
               onPressed: () {
+                if (titleController.text.isEmpty || descriptionController.text.isEmpty || dateController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Veuillez remplir tous les champs')),
+                  );
+                  return;
+                }
                 _editEvent(index, Event(
                   title: titleController.text,
                   description: descriptionController.text,
@@ -137,7 +163,7 @@ class EventsPageState extends State<EventsPage> {
                 ));
                 Navigator.of(context).pop();
               },
-              child: const Text('Save'),
+              child: const Text('Enregistrer'),
             ),
           ],
         );
