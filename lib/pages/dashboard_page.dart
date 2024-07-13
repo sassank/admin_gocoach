@@ -21,8 +21,8 @@ class _DashboardPageState extends State<DashboardPage> {
   String searchQuery = '';
 
   final List<Widget> _pages = [
-    DashboardContent(), // Remplacer HomeContent par DashboardContent
-    UsersPage(searchQuery: ''), // Passer une valeur par défaut
+    const DashboardContent(), // Replace HomeContent par DashboardContent
+    const UsersPage(searchQuery: ''), // Passer une valeur par défaut
     const EventsPage(searchQuery: ''), // Passer une valeur par défaut
   ];
 
@@ -154,7 +154,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ProfilePage()),
+                    MaterialPageRoute(builder: (context) => const ProfilePage()),
                   );
                 },
               ),
@@ -165,10 +165,10 @@ class _DashboardPageState extends State<DashboardPage> {
               children: [
                 NavigationRail(
                   extended: isExpanded,
-                  backgroundColor: Color(0xFF1d9172),
-                  unselectedIconTheme: IconThemeData(color: Colors.white),
-                  unselectedLabelTextStyle: TextStyle(color: Colors.white),
-                  selectedIconTheme: IconThemeData(color: Colors.teal),
+                  backgroundColor: const Color(0xFF1d9172),
+                  unselectedIconTheme: const IconThemeData(color: Colors.white),
+                  unselectedLabelTextStyle: const TextStyle(color: Colors.white),
+                  selectedIconTheme: const IconThemeData(color: Colors.teal),
                   destinations: const [
                     NavigationRailDestination(
                       icon: Icon(Icons.dashboard),
@@ -192,7 +192,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: IndexedStack(
                       index: selectedIndex,
                       children: _pages.map((page) {
@@ -217,6 +217,8 @@ class _DashboardPageState extends State<DashboardPage> {
 }
 
 class DashboardContent extends StatelessWidget {
+  const DashboardContent({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const SingleChildScrollView(

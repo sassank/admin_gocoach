@@ -4,13 +4,13 @@ import '../models/user_model.dart';
 class UsersPage extends StatefulWidget {
   final String searchQuery;
 
-  UsersPage({required this.searchQuery});
+  const UsersPage({super.key, required this.searchQuery});
 
   @override
-  _UsersPageState createState() => _UsersPageState();
+  UsersPageState createState() => UsersPageState();
 }
 
-class _UsersPageState extends State<UsersPage> {
+class UsersPageState extends State<UsersPage> {
   List<User> users = [
     User(firstName: 'John', lastName: 'Doe', subscription: 'Gold'),
     User(firstName: 'Jane', lastName: 'Smith', subscription: 'Silver'),
@@ -44,7 +44,7 @@ class _UsersPageState extends State<UsersPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clients'),
+        title: const Text('Clients'),
       ),
       body: ListView.builder(
         itemCount: filteredUsers.length,
@@ -56,13 +56,13 @@ class _UsersPageState extends State<UsersPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
-                  icon: Icon(Icons.edit),
+                  icon: const Icon(Icons.edit),
                   onPressed: () {
                     _showEditDialog(context, filteredUsers[index], index);
                   },
                 ),
                 IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                   onPressed: () {
                     _deleteUser(index);
                   },
@@ -75,38 +75,38 @@ class _UsersPageState extends State<UsersPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _addUser,
         backgroundColor: Colors.teal,
-        child: Icon(Icons.add),
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
         ),
+        child: const Icon(Icons.add),
       ),
     );
   }
 
   void _showEditDialog(BuildContext context, User user, int index) {
-    final _firstNameController = TextEditingController(text: user.firstName);
-    final _lastNameController = TextEditingController(text: user.lastName);
-    final _subscriptionController = TextEditingController(text: user.subscription);
+    final firstNameController = TextEditingController(text: user.firstName);
+    final lastNameController = TextEditingController(text: user.lastName);
+    final subscriptionController = TextEditingController(text: user.subscription);
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Edit User'),
+          title: const Text('Edit User'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                controller: _firstNameController,
-                decoration: InputDecoration(labelText: 'First Name'),
+                controller: firstNameController,
+                decoration: const InputDecoration(labelText: 'First Name'),
               ),
               TextField(
-                controller: _lastNameController,
-                decoration: InputDecoration(labelText: 'Last Name'),
+                controller: lastNameController,
+                decoration: const InputDecoration(labelText: 'Last Name'),
               ),
               TextField(
-                controller: _subscriptionController,
-                decoration: InputDecoration(labelText: 'Subscription'),
+                controller: subscriptionController,
+                decoration: const InputDecoration(labelText: 'Subscription'),
               ),
             ],
           ),
@@ -115,18 +115,18 @@ class _UsersPageState extends State<UsersPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
                 _editUser(index, User(
-                  firstName: _firstNameController.text,
-                  lastName: _lastNameController.text,
-                  subscription: _subscriptionController.text,
+                  firstName: firstNameController.text,
+                  lastName: lastNameController.text,
+                  subscription: subscriptionController.text,
                 ));
                 Navigator.of(context).pop();
               },
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
           ],
         );
