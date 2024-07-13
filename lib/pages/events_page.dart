@@ -63,7 +63,7 @@ class EventsPageState extends State<EventsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sessions'),
+        title: const Text('Sessions proposés'),
       ),
       body: ListView.builder(
         itemCount: filteredEvents.length,
