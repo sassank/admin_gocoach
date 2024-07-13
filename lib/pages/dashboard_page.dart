@@ -1,5 +1,7 @@
+// lib/pages/dashboard_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'users_page.dart';
 import 'events_page.dart';
 import 'profile_page.dart';
@@ -175,7 +177,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     NavigationRailDestination(
                       icon: Icon(Icons.people),
-                      label: Text("Clients"),
+                      label: Text("Abbonnés"),
                     ),
                     NavigationRailDestination(
                       icon: Icon(Icons.fitness_center),
@@ -221,64 +223,164 @@ class DashboardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Center(
-        child: Wrap(
-          spacing: 20.0, // Espace horizontal entre les cartes
-          runSpacing: 20.0, // Espace vertical entre les cartes
-          alignment: WrapAlignment.start, // Alignement des éléments en haut
-          children: [
-            buildDashboardCard(Icons.person_add, "Nouveaux abonnés", "45 ce mois", Colors.purple),
-            buildDashboardCard(Icons.school, "Coachs inscrits", "10", Colors.orange),
-            buildDashboardCard(Icons.star, "Programmes", "Crossfit", Colors.cyan),
-          ],
-        ),
+      child: Wrap(
+        spacing: 20.0, // Espace horizontal entre les cartes
+        runSpacing: 20.0, // Espace vertical entre les cartes
+        alignment: WrapAlignment.start, // Alignement des éléments en haut
+        children: [
+          const SizedBox(
+            width: 300,
+            child: Card(
+              child: Padding(
+                padding: EdgeInsets.all(18.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.show_chart, size: 26.0),
+                        SizedBox(width: 15.0),
+                        Text(
+                          "Performance",
+                          style: TextStyle(
+                            fontSize: 26.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 20.0),
+                    Text(
+                      "78%",
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 300,
+            child: Card(
+              child: Padding(
+                padding: EdgeInsets.all(18.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.comment, size: 26.0, color: Colors.red),
+                        SizedBox(width: 15.0),
+                        Text(
+                          "Feedback",
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 26.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 20.0),
+                    Text(
+                      "32 Comments",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 300,
+            child: Card(
+              child: Padding(
+                padding: EdgeInsets.all(18.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.people, size: 26.0, color: Colors.amber),
+                        SizedBox(width: 15.0),
+                        Text(
+                          "Abbonnés",
+                          style: TextStyle(
+                            fontSize: 26.0,
+                            color: Colors.amber,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 20.0),
+                    Text(
+                      "150",
+                      style: TextStyle(
+                        fontSize: 36,
+                        color: Colors.amber,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            height: 400,
+            child: SfCartesianChart(
+              primaryXAxis: CategoryAxis(),
+              title: ChartTitle(text: 'Nouveaux abonnés mensuels'),
+              legend: Legend(isVisible: true),
+              tooltipBehavior: TooltipBehavior(enable: true),
+              series: <ChartSeries<_SubscriberData, String>>[
+                ColumnSeries<_SubscriberData, String>(
+                  dataSource: _getSubscriberData(),
+                  xValueMapper: (_SubscriberData data, _) => data.month,
+                  yValueMapper: (_SubscriberData data, _) => data.subscribers,
+                  name: 'Abonnés',
+                  color: Colors.teal,
+                  dataLabelSettings: const DataLabelSettings(isVisible: true),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget buildDashboardCard(IconData icon, String title, String value, Color color) {
-    return SizedBox(
-      width: 300,
-      child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(icon, size: 30.0, color: color),
-                  const SizedBox(width: 15.0),
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                        color: color,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 20.0),
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+  List<_SubscriberData> _getSubscriberData() {
+    final List<_SubscriberData> data = [
+      _SubscriberData('Jan', 30),
+      _SubscriberData('Fev', 40),
+      _SubscriberData('Mar', 35),
+      _SubscriberData('Avr', 50),
+      _SubscriberData('Mai', 70),
+      _SubscriberData('Juin', 60),
+      _SubscriberData('Juil', 80),
+      _SubscriberData('Août', 90),
+      _SubscriberData('Sept', 85),
+      _SubscriberData('Oct', 100),
+      _SubscriberData('Nov', 95),
+      _SubscriberData('Déc', 120),
+    ];
+    return data;
   }
+}
+
+class _SubscriberData {
+  _SubscriberData(this.month, this.subscribers);
+
+  final String month;
+  final int subscribers;
 }
