@@ -5,7 +5,8 @@ import 'users_page.dart';
 import 'profile_page.dart';
 import 'sessions_calendar_page.dart';
 import 'payments_page.dart';
-import 'feedback_page.dart'; // Import the FeedbackPage
+import 'feedback_page.dart';
+import 'coaches_page.dart'; // Import the CoachesPage
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../theme_provider.dart';
 import '../locale_provider.dart';
@@ -29,7 +30,8 @@ class _DashboardPageState extends State<DashboardPage> {
     const EventsPage(searchQuery: ''),
     const SessionsCalendarPage(),
     const PaymentsPage(),
-    const FeedbackPage(), // Add FeedbackPage here
+    const FeedbackPage(),
+    const CoachesPage(), // Add CoachesPage here
   ];
 
   @override
@@ -199,6 +201,10 @@ class _DashboardPageState extends State<DashboardPage> {
                     NavigationRailDestination(
                       icon: Icon(Icons.feedback),
                       label: Text("Feedback"),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.person),
+                      label: Text("Coachs"),
                     ),
                   ],
                   selectedIndex: selectedIndex,
