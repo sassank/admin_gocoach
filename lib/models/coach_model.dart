@@ -1,18 +1,25 @@
-// lib/models/coach_model.dart
 class Coach {
   String firstName;
   String lastName;
-  String email;
+  String specialty;
+  String address;
+  String postalCode;
   String phoneNumber;
-  String profilePicture;
-  List<String> certificates;
+  String email;
+  DateTime hireDate;
+  bool isActive;
+  bool hasCertification;
 
   Coach({
     required this.firstName,
     required this.lastName,
-    required this.email,
+    required this.specialty,
+    required this.address,
+    required this.postalCode,
     required this.phoneNumber,
-    required this.profilePicture,
-    required this.certificates,
+    required this.email,
+    required this.hireDate,
+    required this.isActive,
+    required this.hasCertification,
   });
 }
