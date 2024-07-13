@@ -23,7 +23,7 @@ class _DashboardPageState extends State<DashboardPage> {
   final List<Widget> _pages = [
     DashboardContent(), // Remplacer HomeContent par DashboardContent
     UsersPage(searchQuery: ''), // Passer une valeur par défaut
-    EventsPage(searchQuery: ''), // Passer une valeur par défaut
+    const EventsPage(searchQuery: ''), // Passer une valeur par défaut
   ];
 
   @override
@@ -49,7 +49,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       height: 50,
                     ),
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   Text(
                     ' GoCoach Admin',
                     style: TextStyle(
@@ -66,7 +66,7 @@ class _DashboardPageState extends State<DashboardPage> {
             backgroundColor: isDarkMode ? Colors.grey[850] : Colors.white,
             title: Row(
               children: [
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Container(
                     height: 50,
@@ -93,7 +93,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           filled: true,
                           fillColor: isDarkMode ? Colors.grey[800] : Colors.grey[200],
                           contentPadding:
-                          EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
+                          const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
                           suffixIcon: Container(
                             decoration: const BoxDecoration(
                               color: Colors.teal,
