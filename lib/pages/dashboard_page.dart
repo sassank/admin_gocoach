@@ -339,42 +339,6 @@ class DashboardContent extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(
-            width: 300,
-            child: Card(
-              child: Padding(
-                padding: EdgeInsets.all(18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.attach_money, size: 26.0, color: Colors.green),
-                        SizedBox(width: 15.0),
-                        Text(
-                          "Revenue",
-                          style: TextStyle(
-                            fontSize: 26.0,
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 20.0),
-                    Text(
-                      "2,300 \$",
-                      style: TextStyle(
-                        fontSize: 36,
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
           SizedBox(
             width: double.infinity,
             height: 400,

@@ -92,6 +92,7 @@ class UsersPageState extends State<UsersPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'usersPageFab', // Add a unique heroTag here
         onPressed: _addUser,
         backgroundColor: Colors.teal,
         shape: const RoundedRectangleBorder(

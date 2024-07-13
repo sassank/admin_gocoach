@@ -92,6 +92,7 @@ class EventsPageState extends State<EventsPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'eventsPageFab', // Add a unique heroTag here
         onPressed: _addEvent,
         backgroundColor: Colors.teal,
         shape: const RoundedRectangleBorder(
