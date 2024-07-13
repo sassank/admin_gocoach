@@ -241,12 +241,12 @@ class DashboardContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Wrap(
-        spacing: 20.0, // Espace horizontal entre les cartes
-        runSpacing: 20.0, // Espace vertical entre les cartes
+        spacing: 10.0, // Espace horizontal entre les cartes
+        runSpacing: 10.0, // Espace vertical entre les cartes
         alignment: WrapAlignment.start, // Alignement des éléments en haut
         children: [
           const SizedBox(
-            width: 300,
+            width: 200,
             child: Card(
               child: Padding(
                 padding: EdgeInsets.all(18.0),
@@ -258,7 +258,7 @@ class DashboardContent extends StatelessWidget {
                         Icon(Icons.show_chart, size: 26.0),
                         SizedBox(width: 15.0),
                         Text(
-                          "Performance",
+                          "Sessions",
                           style: TextStyle(
                             fontSize: 26.0,
                             fontWeight: FontWeight.bold,
@@ -268,7 +268,7 @@ class DashboardContent extends StatelessWidget {
                     ),
                     SizedBox(height: 20.0),
                     Text(
-                      "78%",
+                      "13",
                       style: TextStyle(
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
@@ -303,7 +303,7 @@ class DashboardContent extends StatelessWidget {
                     ),
                     SizedBox(height: 20.0),
                     Text(
-                      "32 Comments",
+                      "32 avis",
                       style: TextStyle(
                         color: Colors.red,
                         fontSize: 36,

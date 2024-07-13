@@ -15,46 +15,40 @@ class UsersPageState extends State<UsersPage> {
     User(
       firstName: 'John',
       lastName: 'Doe',
-      dateOfBirth: DateTime(1990, 5, 15),
-      gender: 'Male',
+      subscription: 'Gold',
       address: '123 Main St',
+      postalCode: '12345',
       phoneNumber: '123-456-7890',
       email: 'john.doe@example.com',
-      subscription: 'Gold',
-      subscriptionStartDate: DateTime(2023, 1, 1),
-      subscriptionEndDate: DateTime(2023, 12, 31),
-      subscriptionPrice: 1200.00,
+      subscriptionStartDate: DateTime(2022, 1, 1),
+      subscriptionEndDate: DateTime(2023, 1, 1),
       isActive: true,
       isPaymentUpToDate: true,
     ),
     User(
       firstName: 'Jane',
       lastName: 'Smith',
-      dateOfBirth: DateTime(1985, 7, 20),
-      gender: 'Female',
-      address: '456 Elm St',
-      phoneNumber: '987-654-3210',
-      email: 'jane.smith@example.com',
       subscription: 'Silver',
-      subscriptionStartDate: DateTime(2023, 1, 1),
-      subscriptionEndDate: DateTime(2023, 12, 31),
-      subscriptionPrice: 1000.00,
-      isActive: false,
+      address: '456 Elm St',
+      postalCode: '67890',
+      phoneNumber: '098-765-4321',
+      email: 'jane.smith@example.com',
+      subscriptionStartDate: DateTime(2022, 2, 1),
+      subscriptionEndDate: DateTime(2023, 2, 1),
+      isActive: true,
       isPaymentUpToDate: false,
     ),
     User(
       firstName: 'Jim',
       lastName: 'Beam',
-      dateOfBirth: DateTime(1975, 3, 10),
-      gender: 'Male',
-      address: '789 Oak St',
-      phoneNumber: '555-555-5555',
-      email: 'jim.beam@example.com',
       subscription: 'Bronze',
-      subscriptionStartDate: DateTime(2023, 1, 1),
-      subscriptionEndDate: DateTime(2023, 12, 31),
-      subscriptionPrice: 800.00,
-      isActive: true,
+      address: '789 Maple Ave',
+      postalCode: '54321',
+      phoneNumber: '456-789-0123',
+      email: 'jim.beam@example.com',
+      subscriptionStartDate: DateTime(2022, 3, 1),
+      subscriptionEndDate: DateTime(2023, 3, 1),
+      isActive: false,
       isPaymentUpToDate: true,
     ),
   ];
@@ -64,17 +58,15 @@ class UsersPageState extends State<UsersPage> {
       users.add(User(
         firstName: 'New',
         lastName: 'User',
-        dateOfBirth: DateTime(2000, 1, 1),
-        gender: 'Other',
+        subscription: '',
         address: '',
+        postalCode: '',
         phoneNumber: '',
         email: '',
-        subscription: '',
         subscriptionStartDate: DateTime.now(),
         subscriptionEndDate: DateTime.now().add(const Duration(days: 365)),
-        subscriptionPrice: 0.00,
-        isActive: true,
-        isPaymentUpToDate: true,
+        isActive: false,
+        isPaymentUpToDate: false,
       ));
     });
   }
@@ -127,12 +119,13 @@ class UsersPageState extends State<UsersPage> {
           columns: const [
             DataColumn(label: Text('Prénom')),
             DataColumn(label: Text('Nom de famille')),
-            DataColumn(label: Text('Email')),
-            DataColumn(label: Text('Téléphone')),
             DataColumn(label: Text('Abonnement')),
-            DataColumn(label: Text('Début Abonnement')),
-            DataColumn(label: Text('Fin Abonnement')),
-            DataColumn(label: Text('Prix Abonnement')),
+            DataColumn(label: Text('Adresse')),
+            DataColumn(label: Text('Code postal')),
+            DataColumn(label: Text('Téléphone')),
+            DataColumn(label: Text('Email')),
+            DataColumn(label: Text('Début d\'abonnement')),
+            DataColumn(label: Text('Fin d\'abonnement')),
             DataColumn(label: Text('Statut')),
             DataColumn(label: Text('Paiement')),
             DataColumn(label: Text('Actions')),
@@ -142,37 +135,57 @@ class UsersPageState extends State<UsersPage> {
               cells: [
                 DataCell(Text(user.firstName)),
                 DataCell(Text(user.lastName)),
-                DataCell(Text(user.email)),
-                DataCell(Text(user.phoneNumber)),
                 DataCell(Text(user.subscription)),
+                DataCell(Text(user.address)),
+                DataCell(Text(user.postalCode)),
+                DataCell(Text(user.phoneNumber)),
+                DataCell(Text(user.email)),
                 DataCell(Text(user.subscriptionStartDate.toLocal().toString().split(' ')[0])),
                 DataCell(Text(user.subscriptionEndDate.toLocal().toString().split(' ')[0])),
-                DataCell(Text(user.subscriptionPrice.toString())),
-                DataCell(Text(
-                  user.isActive ? 'Actif' : 'Non Actif',
-                  style: TextStyle(
-                    color: user.isActive ? Colors.green : Colors.red,
-                  ),
-                )),
-                DataCell(Text(
-                  user.isPaymentUpToDate ? 'À jour' : 'En retard',
-                  style: TextStyle(
-                    color: user.isPaymentUpToDate ? Colors.green : Colors.red,
-                  ),
+                DataCell(Row(
+                  children: [
+                    const Text('Statut: '),
+                    Switch(
+                      value: user.isActive,
+                      activeColor: Colors.green,
+                      inactiveThumbColor: Colors.red,
+                      onChanged: (value) {
+                        setState(() {
+                          user.isActive = value;
+                        });
+                      },
+                    ),
+                  ],
                 )),
                 DataCell(Row(
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        _showEditDialog(context, user, users.indexOf(user));
+                    const Text('Paiement à jour: '),
+                    Switch(
+                      value: user.isPaymentUpToDate,
+                      activeColor: Colors.green,
+                      inactiveThumbColor: Colors.red,
+                      onChanged: (value) {
+                        setState(() {
+                          user.isPaymentUpToDate = value;
+                        });
                       },
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
+                  ],
+                )),
+                DataCell(Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        _showEditDialog(context, user, users.indexOf(user));
+                      },
+                      child: const Icon(Icons.edit),
+                    ),
+                    const SizedBox(width: 8),
+                    InkWell(
+                      onTap: () {
                         _deleteUser(users.indexOf(user));
                       },
+                      child: const Icon(Icons.delete),
                     ),
                   ],
                 )),
@@ -196,12 +209,13 @@ class UsersPageState extends State<UsersPage> {
   void _showEditDialog(BuildContext context, User user, int index) {
     final firstNameController = TextEditingController(text: user.firstName);
     final lastNameController = TextEditingController(text: user.lastName);
-    final emailController = TextEditingController(text: user.email);
-    final phoneNumberController = TextEditingController(text: user.phoneNumber);
     final subscriptionController = TextEditingController(text: user.subscription);
+    final addressController = TextEditingController(text: user.address);
+    final postalCodeController = TextEditingController(text: user.postalCode);
+    final phoneNumberController = TextEditingController(text: user.phoneNumber);
+    final emailController = TextEditingController(text: user.email);
     final subscriptionStartDateController = TextEditingController(text: user.subscriptionStartDate.toLocal().toString().split(' ')[0]);
     final subscriptionEndDateController = TextEditingController(text: user.subscriptionEndDate.toLocal().toString().split(' ')[0]);
-    final subscriptionPriceController = TextEditingController(text: user.subscriptionPrice.toString());
     bool isActive = user.isActive;
     bool isPaymentUpToDate = user.isPaymentUpToDate;
 
@@ -223,20 +237,28 @@ class UsersPageState extends State<UsersPage> {
                   decoration: const InputDecoration(labelText: 'Nom de famille'),
                 ),
                 TextField(
-                  controller: emailController,
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  controller: subscriptionController,
+                  decoration: const InputDecoration(labelText: 'Abonnement'),
+                ),
+                TextField(
+                  controller: addressController,
+                  decoration: const InputDecoration(labelText: 'Adresse'),
+                ),
+                TextField(
+                  controller: postalCodeController,
+                  decoration: const InputDecoration(labelText: 'Code postal'),
                 ),
                 TextField(
                   controller: phoneNumberController,
                   decoration: const InputDecoration(labelText: 'Téléphone'),
                 ),
                 TextField(
-                  controller: subscriptionController,
-                  decoration: const InputDecoration(labelText: 'Abonnement'),
+                  controller: emailController,
+                  decoration: const InputDecoration(labelText: 'Email'),
                 ),
                 TextField(
                   controller: subscriptionStartDateController,
-                  decoration: const InputDecoration(labelText: 'Début Abonnement'),
+                  decoration: const InputDecoration(labelText: 'Début d\'abonnement'),
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
@@ -251,7 +273,7 @@ class UsersPageState extends State<UsersPage> {
                 ),
                 TextField(
                   controller: subscriptionEndDateController,
-                  decoration: const InputDecoration(labelText: 'Fin Abonnement'),
+                  decoration: const InputDecoration(labelText: 'Fin d\'abonnement'),
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
@@ -264,37 +286,34 @@ class UsersPageState extends State<UsersPage> {
                     }
                   },
                 ),
-                TextField(
-                  controller: subscriptionPriceController,
-                  decoration: const InputDecoration(labelText: 'Prix Abonnement'),
-                  keyboardType: TextInputType.number,
-                ),
                 Row(
                   children: [
                     const Text('Statut: '),
                     Switch(
                       value: isActive,
+                      activeColor: Colors.green,
+                      inactiveThumbColor: Colors.red,
                       onChanged: (value) {
                         setState(() {
                           isActive = value;
                         });
                       },
                     ),
-                    Text(isActive ? 'Actif' : 'Non Actif'),
                   ],
                 ),
                 Row(
                   children: [
-                    const Text('Paiement: '),
+                    const Text('Paiement à jour: '),
                     Switch(
                       value: isPaymentUpToDate,
+                      activeColor: Colors.green,
+                      inactiveThumbColor: Colors.red,
                       onChanged: (value) {
                         setState(() {
                           isPaymentUpToDate = value;
                         });
                       },
                     ),
-                    Text(isPaymentUpToDate ? 'À jour' : 'En retard'),
                   ],
                 ),
               ],
@@ -309,7 +328,15 @@ class UsersPageState extends State<UsersPage> {
             ),
             TextButton(
               onPressed: () {
-                if (firstNameController.text.isEmpty || lastNameController.text.isEmpty || emailController.text.isEmpty || phoneNumberController.text.isEmpty || subscriptionController.text.isEmpty || subscriptionPriceController.text.isEmpty) {
+                if (firstNameController.text.isEmpty ||
+                    lastNameController.text.isEmpty ||
+                    subscriptionController.text.isEmpty ||
+                    addressController.text.isEmpty ||
+                    postalCodeController.text.isEmpty ||
+                    phoneNumberController.text.isEmpty ||
+                    emailController.text.isEmpty ||
+                    subscriptionStartDateController.text.isEmpty ||
+                    subscriptionEndDateController.text.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Veuillez remplir tous les champs')),
                   );
@@ -318,15 +345,13 @@ class UsersPageState extends State<UsersPage> {
                 _editUser(index, User(
                   firstName: firstNameController.text,
                   lastName: lastNameController.text,
-                  dateOfBirth: user.dateOfBirth,
-                  gender: user.gender,
-                  address: user.address,
+                  subscription: subscriptionController.text,
+                  address: addressController.text,
+                  postalCode: postalCodeController.text,
                   phoneNumber: phoneNumberController.text,
                   email: emailController.text,
-                  subscription: subscriptionController.text,
                   subscriptionStartDate: DateTime.parse(subscriptionStartDateController.text),
                   subscriptionEndDate: DateTime.parse(subscriptionEndDateController.text),
-                  subscriptionPrice: double.parse(subscriptionPriceController.text),
                   isActive: isActive,
                   isPaymentUpToDate: isPaymentUpToDate,
                 ));
