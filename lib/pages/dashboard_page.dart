@@ -1,4 +1,3 @@
-// lib/pages/dashboard_page.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'users_page.dart';
@@ -221,155 +220,64 @@ class DashboardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      child: Wrap(
-        spacing: 20.0, // Espace horizontal entre les cartes
-        runSpacing: 20.0, // Espace vertical entre les cartes
-        alignment: WrapAlignment.start, // Alignement des éléments en haut
-        children: [
-          SizedBox(
-            width: 300,
-            child: Card(
-              child: Padding(
-                padding: EdgeInsets.all(18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.show_chart, size: 26.0),
-                        SizedBox(width: 15.0),
-                        Text(
-                          "Performance",
-                          style: TextStyle(
-                            fontSize: 26.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 20.0),
-                    Text(
-                      "78%",
+    return SingleChildScrollView(
+      child: Center(
+        child: Wrap(
+          spacing: 20.0, // Espace horizontal entre les cartes
+          runSpacing: 20.0, // Espace vertical entre les cartes
+          alignment: WrapAlignment.start, // Alignement des éléments en haut
+          children: [
+            buildDashboardCard(Icons.person_add, "Nouveaux abonnés", "45 ce mois", Colors.purple),
+            buildDashboardCard(Icons.school, "Coachs inscrits", "10", Colors.orange),
+            buildDashboardCard(Icons.star, "Programmes", "Crossfit", Colors.cyan),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildDashboardCard(IconData icon, String title, String value, Color color) {
+    return SizedBox(
+      width: 300,
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(icon, size: 30.0, color: color),
+                  const SizedBox(width: 15.0),
+                  Expanded(
+                    child: Text(
+                      title,
                       style: TextStyle(
-                        fontSize: 36,
+                        fontSize: 24.0,
                         fontWeight: FontWeight.bold,
+                        color: color,
                       ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 300,
-            child: Card(
-              child: Padding(
-                padding: EdgeInsets.all(18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.comment, size: 26.0, color: Colors.red),
-                        SizedBox(width: 15.0),
-                        Text(
-                          "Feedback",
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 26.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 20.0),
-                    Text(
-                      "32 Comments",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
-            ),
-          ),
-          SizedBox(
-            width: 300,
-            child: Card(
-              child: Padding(
-                padding: EdgeInsets.all(18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.people, size: 26.0, color: Colors.amber),
-                        SizedBox(width: 15.0),
-                        Text(
-                          "Clients",
-                          style: TextStyle(
-                            fontSize: 26.0,
-                            color: Colors.amber,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 20.0),
-                    Text(
-                      "150",
-                      style: TextStyle(
-                        fontSize: 36,
-                        color: Colors.amber,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
+              const SizedBox(height: 20.0),
+              Text(
+                value,
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: color,
                 ),
-              ),
-            ),
+              )
+            ],
           ),
-          SizedBox(
-            width: 300,
-            child: Card(
-              child: Padding(
-                padding: EdgeInsets.all(18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.attach_money, size: 26.0, color: Colors.green),
-                        SizedBox(width: 15.0),
-                        Text(
-                          "Revenue",
-                          style: TextStyle(
-                            fontSize: 26.0,
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 20.0),
-                    Text(
-                      "2,300 \$",
-                      style: TextStyle(
-                        fontSize: 36,
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

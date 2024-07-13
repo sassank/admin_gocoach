@@ -30,9 +30,28 @@ class UsersPageState extends State<UsersPage> {
   }
 
   void _deleteUser(int index) {
-    setState(() {
-      users.removeAt(index);
-    });
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmer la suppression'),
+        content: const Text('Êtes-vous sûr de vouloir supprimer cet utilisateur ?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                users.removeAt(index);
+              });
+              Navigator.of(context).pop();
+            },
+            child: const Text('Supprimer'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -51,7 +70,7 @@ class UsersPageState extends State<UsersPage> {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text('${filteredUsers[index].firstName} ${filteredUsers[index].lastName}'),
-            subtitle: Text('Subscription: ${filteredUsers[index].subscription}'),
+            subtitle: Text('Abonnement: ${filteredUsers[index].subscription}'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -92,21 +111,21 @@ class UsersPageState extends State<UsersPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Edit User'),
+          title: const Text('Modifier l\'utilisateur'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: firstNameController,
-                decoration: const InputDecoration(labelText: 'First Name'),
+                decoration: const InputDecoration(labelText: 'Prénom'),
               ),
               TextField(
                 controller: lastNameController,
-                decoration: const InputDecoration(labelText: 'Last Name'),
+                decoration: const InputDecoration(labelText: 'Nom de famille'),
               ),
               TextField(
                 controller: subscriptionController,
-                decoration: const InputDecoration(labelText: 'Subscription'),
+                decoration: const InputDecoration(labelText: 'Abonnement'),
               ),
             ],
           ),
@@ -115,10 +134,16 @@ class UsersPageState extends State<UsersPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: const Text('Annuler'),
             ),
             TextButton(
               onPressed: () {
+                if (firstNameController.text.isEmpty || lastNameController.text.isEmpty || subscriptionController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Veuillez remplir tous les champs')),
+                  );
+                  return;
+                }
                 _editUser(index, User(
                   firstName: firstNameController.text,
                   lastName: lastNameController.text,
@@ -126,7 +151,7 @@ class UsersPageState extends State<UsersPage> {
                 ));
                 Navigator.of(context).pop();
               },
-              child: const Text('Save'),
+              child: const Text('Enregistrer'),
             ),
           ],
         );
