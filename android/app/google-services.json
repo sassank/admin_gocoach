@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "203559158951",
+    "project_id": "gocoachapp-d882a",
+    "storage_bucket": "gocoachapp-d882a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203559158951:android:ff8d310c6459bb455d8782",
+        "android_client_info": {
+          "package_name": "com.example.admin_panel_gocoach"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqiLZ2Up9rHzsF61DRYSnAxUZ2WKMzsp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
