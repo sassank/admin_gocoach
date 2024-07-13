@@ -1,10 +1,11 @@
 // lib/models/invoice_model.dart
 class Invoice {
-  String invoiceNumber;
-  String clientName;
-  double amount;
-  DateTime dueDate;
+  final String invoiceNumber;
+  final String clientName;
+  final double amount;
+  final DateTime dueDate;
   bool isPaid;
+  final String pdfPath;
 
   Invoice({
     required this.invoiceNumber,
@@ -12,5 +13,6 @@ class Invoice {
     required this.amount,
     required this.dueDate,
     required this.isPaid,
+    required this.pdfPath,
   });
 }

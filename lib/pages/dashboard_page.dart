@@ -1,4 +1,3 @@
-// lib/pages/dashboard_page.dart
 import 'package:admin_panel_gocoach/pages/events_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +5,7 @@ import 'users_page.dart';
 import 'profile_page.dart';
 import 'sessions_calendar_page.dart';
 import 'payments_page.dart';
+import 'feedback_page.dart'; // Import the FeedbackPage
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../theme_provider.dart';
 import '../locale_provider.dart';
@@ -28,7 +28,8 @@ class _DashboardPageState extends State<DashboardPage> {
     const UsersPage(searchQuery: ''),
     const EventsPage(searchQuery: ''),
     const SessionsCalendarPage(),
-    const PaymentsPage(), // Ajoutez la nouvelle page ici
+    const PaymentsPage(),
+    const FeedbackPage(), // Add FeedbackPage here
   ];
 
   @override
@@ -195,6 +196,10 @@ class _DashboardPageState extends State<DashboardPage> {
                       icon: Icon(Icons.payment),
                       label: Text("Paiements"),
                     ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.feedback),
+                      label: Text("Feedback"),
+                    ),
                   ],
                   selectedIndex: selectedIndex,
                   onDestinationSelected: (int index) {
@@ -346,42 +351,7 @@ class DashboardContent extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(
-            width: 300,
-            child: Card(
-              child: Padding(
-                padding: EdgeInsets.all(18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.attach_money, size: 26.0, color: Colors.green),
-                        SizedBox(width: 15.0),
-                        Text(
-                          "Revenue",
-                          style: TextStyle(
-                            fontSize: 26.0,
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 20.0),
-                    Text(
-                      "2,300 \$",
-                      style: TextStyle(
-                        fontSize: 36,
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
+          const RevenueCard(),
           SizedBox(
             width: double.infinity,
             height: 400,
@@ -431,4 +401,55 @@ class _SubscriberData {
 
   final String month;
   final int subscribers;
+}
+
+class RevenueCard extends StatelessWidget {
+  const RevenueCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    double totalRevenue = calculateTotalRevenue();
+
+    return SizedBox(
+      width: 300,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(
+                children: [
+                  Icon(Icons.attach_money, size: 26.0, color: Colors.green),
+                  SizedBox(width: 15.0),
+                  Text(
+                    "Revenue",
+                    style: TextStyle(
+                      fontSize: 26.0,
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20.0),
+              Text(
+                "$totalRevenue €",
+                style: const TextStyle(
+                  fontSize: 36,
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  double calculateTotalRevenue() {
+    final invoices = PaymentsPageState().invoices;
+    return invoices.map((invoice) => invoice.amount).reduce((a, b) => a + b);
+  }
 }

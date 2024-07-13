@@ -1,5 +1,8 @@
-// lib/pages/payments_page.dart
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
 import '../models/invoice_model.dart';
 
 class PaymentsPage extends StatefulWidget {
@@ -17,6 +20,7 @@ class PaymentsPageState extends State<PaymentsPage> {
       amount: 150.00,
       dueDate: DateTime.now().add(const Duration(days: 15)),
       isPaid: false,
+      pdfPath: 'facture.pdf',
     ),
     Invoice(
       invoiceNumber: 'INV002',
@@ -24,6 +28,7 @@ class PaymentsPageState extends State<PaymentsPage> {
       amount: 200.00,
       dueDate: DateTime.now().add(const Duration(days: 10)),
       isPaid: true,
+      pdfPath: 'facture.pdf',
     ),
     Invoice(
       invoiceNumber: 'INV003',
@@ -31,6 +36,7 @@ class PaymentsPageState extends State<PaymentsPage> {
       amount: 250.00,
       dueDate: DateTime.now().add(const Duration(days: 5)),
       isPaid: false,
+      pdfPath: 'facture.pdf',
     ),
   ];
 
@@ -65,76 +71,87 @@ class PaymentsPageState extends State<PaymentsPage> {
     );
   }
 
-  double _calculateTotalAmount() {
-    return invoices.fold(0, (sum, invoice) => sum + invoice.amount);
+  Future<void> _downloadInvoice(String pdfPath) async {
+    try {
+      final ByteData data = await rootBundle.load('assets/$pdfPath');
+      final Uint8List bytes = data.buffer.asUint8List();
+      final directory = await getApplicationDocumentsDirectory();
+      final path = '${directory.path}/$pdfPath';
+      final file = File(path);
+      await file.writeAsBytes(bytes);
+      OpenFile.open(path);
+    } catch (e) {
+      print('Error opening file: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    double totalRevenue = invoices.fold(0, (sum, item) => sum + item.amount);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Paiements'),
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Montant total des paiements: ${_calculateTotalAmount().toStringAsFixed(2)} €',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: DataTable(
+              columns: const [
+                DataColumn(label: Text('Numéro de facture')),
+                DataColumn(label: Text('Nom du client')),
+                DataColumn(label: Text('Montant')),
+                DataColumn(label: Text('Date d\'échéance')),
+                DataColumn(label: Text('Statut')),
+                DataColumn(label: Text('Actions')),
+              ],
+              rows: invoices.map((invoice) {
+                return DataRow(
+                  cells: [
+                    DataCell(Text(invoice.invoiceNumber)),
+                    DataCell(Text(invoice.clientName)),
+                    DataCell(Text('${invoice.amount} €')),
+                    DataCell(Text(invoice.dueDate.toLocal().toString().split(' ')[0])),
+                    DataCell(Text(
+                      invoice.isPaid ? 'Payé' : 'Non payé',
+                      style: TextStyle(
+                        color: invoice.isPaid ? Colors.green : Colors.red,
+                      ),
+                    )),
+                    DataCell(Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.check),
+                          onPressed: invoice.isPaid
+                              ? null
+                              : () {
+                            _markAsPaid(invoices.indexOf(invoice));
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            _deleteInvoice(invoices.indexOf(invoice));
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.download),
+                          onPressed: () {
+                            _downloadInvoice(invoice.pdfPath);
+                          },
+                        ),
+                      ],
+                    )),
+                  ],
+                );
+              }).toList(),
             ),
           ),
-          Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columns: const [
-                  DataColumn(label: Text('Numéro de facture')),
-                  DataColumn(label: Text('Nom du client')),
-                  DataColumn(label: Text('Montant')),
-                  DataColumn(label: Text('Date d\'échéance')),
-                  DataColumn(label: Text('Statut')),
-                  DataColumn(label: Text('Actions')),
-                ],
-                rows: invoices.map((invoice) {
-                  return DataRow(
-                    cells: [
-                      DataCell(Text(invoice.invoiceNumber)),
-                      DataCell(Text(invoice.clientName)),
-                      DataCell(Text('${invoice.amount.toStringAsFixed(2)} €')),
-                      DataCell(Text(invoice.dueDate.toLocal().toString().split(' ')[0])),
-                      DataCell(Text(
-                        invoice.isPaid ? 'Payé' : 'Non payé',
-                        style: TextStyle(
-                          color: invoice.isPaid ? Colors.green : Colors.red,
-                        ),
-                      )),
-                      DataCell(Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.check),
-                            onPressed: invoice.isPaid
-                                ? null
-                                : () {
-                              _markAsPaid(invoices.indexOf(invoice));
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () {
-                              _deleteInvoice(invoices.indexOf(invoice));
-                            },
-                          ),
-                        ],
-                      )),
-                    ],
-                  );
-                }).toList(),
-              ),
-            ),
+          const SizedBox(height: 20),
+          Text(
+            'Total Revenue: $totalRevenue €',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ],
       ),
