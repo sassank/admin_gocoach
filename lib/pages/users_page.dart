@@ -53,21 +53,9 @@ class UsersPageState extends State<UsersPage> {
     ),
   ];
 
-  void _addUser() {
+  void _addUser(User user) {
     setState(() {
-      users.add(User(
-        firstName: 'New',
-        lastName: 'User',
-        subscription: '',
-        address: '',
-        postalCode: '',
-        phoneNumber: '',
-        email: '',
-        subscriptionStartDate: DateTime.now(),
-        subscriptionEndDate: DateTime.now().add(const Duration(days: 365)),
-        isActive: false,
-        isPaymentUpToDate: false,
-      ));
+      users.add(user);
     });
   }
 
@@ -196,7 +184,9 @@ class UsersPageState extends State<UsersPage> {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'usersPageFab',
-        onPressed: _addUser,
+        onPressed: () {
+          _showAddUserDialog(context);
+        },
         backgroundColor: Colors.teal,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -358,6 +348,165 @@ class UsersPageState extends State<UsersPage> {
                 Navigator.of(context).pop();
               },
               child: const Text('Enregistrer'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showAddUserDialog(BuildContext context) {
+    final firstNameController = TextEditingController();
+    final lastNameController = TextEditingController();
+    final subscriptionController = TextEditingController();
+    final addressController = TextEditingController();
+    final postalCodeController = TextEditingController();
+    final phoneNumberController = TextEditingController();
+    final emailController = TextEditingController();
+    final subscriptionStartDateController = TextEditingController();
+    final subscriptionEndDateController = TextEditingController();
+    bool isActive = false;
+    bool isPaymentUpToDate = false;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Ajouter un nouvel utilisateur'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: firstNameController,
+                  decoration: const InputDecoration(labelText: 'Prénom'),
+                ),
+                TextField(
+                  controller: lastNameController,
+                  decoration: const InputDecoration(labelText: 'Nom de famille'),
+                ),
+                TextField(
+                  controller: subscriptionController,
+                  decoration: const InputDecoration(labelText: 'Abonnement'),
+                ),
+                TextField(
+                  controller: addressController,
+                  decoration: const InputDecoration(labelText: 'Adresse'),
+                ),
+                TextField(
+                  controller: postalCodeController,
+                  decoration: const InputDecoration(labelText: 'Code postal'),
+                ),
+                TextField(
+                  controller: phoneNumberController,
+                  decoration: const InputDecoration(labelText: 'Téléphone'),
+                ),
+                TextField(
+                  controller: emailController,
+                  decoration: const InputDecoration(labelText: 'Email'),
+                ),
+                TextField(
+                  controller: subscriptionStartDateController,
+                  decoration: const InputDecoration(labelText: 'Début d\'abonnement'),
+                  onTap: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2101),
+                    );
+                    if (pickedDate != null) {
+                      subscriptionStartDateController.text = pickedDate.toLocal().toString().split(' ')[0];
+                    }
+                  },
+                ),
+                TextField(
+                  controller: subscriptionEndDateController,
+                  decoration: const InputDecoration(labelText: 'Fin d\'abonnement'),
+                  onTap: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now().add(const Duration(days: 365)),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2101),
+                    );
+                    if (pickedDate != null) {
+                      subscriptionEndDateController.text = pickedDate.toLocal().toString().split(' ')[0];
+                    }
+                  },
+                ),
+                Row(
+                  children: [
+                    const Text('Statut: '),
+                    Switch(
+                      value: isActive,
+                      activeColor: Colors.green,
+                      inactiveThumbColor: Colors.red,
+                      onChanged: (value) {
+                        setState(() {
+                          isActive = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text('Paiement à jour: '),
+                    Switch(
+                      value: isPaymentUpToDate,
+                      activeColor: Colors.green,
+                      inactiveThumbColor: Colors.red,
+                      onChanged: (value) {
+                        setState(() {
+                          isPaymentUpToDate = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Annuler'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (firstNameController.text.isEmpty ||
+                    lastNameController.text.isEmpty ||
+                    subscriptionController.text.isEmpty ||
+                    addressController.text.isEmpty ||
+                    postalCodeController.text.isEmpty ||
+                    phoneNumberController.text.isEmpty ||
+                    emailController.text.isEmpty ||
+                    subscriptionStartDateController.text.isEmpty ||
+                    subscriptionEndDateController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Veuillez remplir tous les champs')),
+                  );
+                  return;
+                }
+                _addUser(User(
+                  firstName: firstNameController.text,
+                  lastName: lastNameController.text,
+                  subscription: subscriptionController.text,
+                  address: addressController.text,
+                  postalCode: postalCodeController.text,
+                  phoneNumber: phoneNumberController.text,
+                  email: emailController.text,
+                  subscriptionStartDate: DateTime.parse(subscriptionStartDateController.text),
+                  subscriptionEndDate: DateTime.parse(subscriptionEndDateController.text),
+                  isActive: isActive,
+                  isPaymentUpToDate: isPaymentUpToDate,
+                ));
+                Navigator.of(context).pop();
+              },
+              child: const Text('Ajouter'),
             ),
           ],
         );

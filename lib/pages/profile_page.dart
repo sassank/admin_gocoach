@@ -21,14 +21,14 @@ class ProfilePage extends StatelessWidget {
                 radius: 50,
                 backgroundImage: AssetImage('assets/images/avatar.jpg'),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               const Text(
-                'Nom: John Doe',
-                style: TextStyle(fontSize: 24),
+                'GoCoach administrator',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               Text(
-                'Email: johndoe@example.com',
+                'administrator@gocoach.com',
                 style: TextStyle(fontSize: 20, color: Colors.grey[600]),
               ),
             ],
