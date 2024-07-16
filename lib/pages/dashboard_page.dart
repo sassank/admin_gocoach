@@ -1,12 +1,13 @@
-import 'package:admin_panel_gocoach/pages/events_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'events_page.dart';
 import 'users_page.dart';
 import 'profile_page.dart';
 import 'sessions_calendar_page.dart';
 import 'payments_page.dart';
 import 'feedback_page.dart';
 import 'coaches_page.dart'; // Import the CoachesPage
+import 'login_page.dart'; // Import the LoginPage
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../theme_provider.dart';
 import '../locale_provider.dart';
@@ -27,12 +28,19 @@ class _DashboardPageState extends State<DashboardPage> {
   final List<Widget> _pages = [
     const DashboardContent(),
     const UsersPage(searchQuery: ''),
-    const EventsPage(searchQuery: ''),
+    const EventsPage(searchQuery: '',),
     const SessionsCalendarPage(),
     const PaymentsPage(),
     const FeedbackPage(),
     const CoachesPage(), // Add CoachesPage here
   ];
+
+  void _logout() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +173,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     MaterialPageRoute(builder: (context) => const ProfilePage()),
                   );
                 },
+              ),
+              IconButton(
+                icon: Icon(Icons.logout,
+                    color: isDarkMode ? Colors.white : Colors.black),
+                onPressed: _logout,
               ),
             ],
           ),
