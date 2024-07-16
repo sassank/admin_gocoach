@@ -10,6 +10,7 @@ class User {
   DateTime subscriptionEndDate;
   bool isActive;
   bool isPaymentUpToDate;
+  String role; // Ajout du champ de rôle
 
   User({
     required this.firstName,
@@ -23,5 +24,6 @@ class User {
     required this.subscriptionEndDate,
     required this.isActive,
     required this.isPaymentUpToDate,
+    required this.role, // Initialisation du champ de rôle
   });
 }

@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'dashboard_page.dart';
+import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -12,15 +15,36 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _login() {
+  Future<void> _login() async {
     if (_usernameController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => DashboardPage()),
+      final response = await http.post(
+        Uri.parse('http://localhost:8080/login'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': _usernameController.text,
+          'password': _passwordController.text,
+        }),
       );
+
+      if (response.statusCode == 200) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const DashboardPage()),
+        );
+      } else if (response.statusCode == 401) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid credentials. Please try again.')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to login. Please try again.')),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Veuillez saisir vos identifiants')),
+        const SnackBar(content: Text('Veuillez saisir vos identifiants')),
       );
     }
   }
@@ -34,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
           Opacity(
             opacity: 0.5,
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/images/gym.jpg"),
                   fit: BoxFit.cover,
@@ -50,9 +74,9 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   // Title
-                  Text(
+                  const Text(
                     "Administration de l'application",
                     style: TextStyle(
                       fontSize: 25,
@@ -79,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 30.0),
+                  const SizedBox(height: 30.0),
                   // Logo
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
@@ -89,78 +113,81 @@ class _LoginPageState extends State<LoginPage> {
                       width: 100,
                     ),
                   ),
-                  SizedBox(height: 30.0),
+                  const SizedBox(height: 30.0),
                   // Username field
-                  Container(
+                  SizedBox(
                     width: 300,
                     child: TextField(
                       controller: _usernameController,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.person),
+                        prefixIcon: const Icon(Icons.person),
                         labelText: 'Email',
                         filled: true,
                         fillColor: Colors.white,
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF1d9172)),
+                          borderSide: const BorderSide(color: Color(0xFF1d9172)),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black54),
+                          borderSide: const BorderSide(color: Colors.black54),
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   // Password field
-                  Container(
+                  SizedBox(
                     width: 300,
                     child: TextField(
                       controller: _passwordController,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.lock),
+                        prefixIcon: const Icon(Icons.lock),
                         labelText: 'Mot de passe',
                         filled: true,
                         fillColor: Colors.white,
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF1d9172)),
+                          borderSide: const BorderSide(color: Color(0xFF1d9172)),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black54),
+                          borderSide: const BorderSide(color: Colors.black54),
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
                       obscureText: true,
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   // Login button
-                  Container(
+                  SizedBox(
                     width: 300,
                     child: ElevatedButton(
                       onPressed: _login,
-                      child: Text('Se connecter'),
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: Color(0xFF1d9172), // Button color
+                        backgroundColor: const Color(0xFF1d9172), // Button color
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        textStyle: TextStyle(fontSize: 18),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        textStyle: const TextStyle(fontSize: 18),
                       ),
+                      child: const Text('Se connecter'),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   // Register and forgot password
                   Column(
                     children: [
                       TextButton(
                         onPressed: () {
-                          // Handle registration
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const RegisterPage()),
+                          );
                         },
-                        child: Text(
+                        child: const Text(
                           "Vous n'avez pas de compte ?",
                           style: TextStyle(color: Color(0xFF1d9172)),
                         ),
@@ -169,7 +196,7 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           // Handle password reset
                         },
-                        child: Text(
+                        child: const Text(
                           "Mot de passe oublié",
                           style: TextStyle(color: Color(0xFF1d9172)),
                         ),

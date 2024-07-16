@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
@@ -81,7 +81,6 @@ class PaymentsPageState extends State<PaymentsPage> {
       await file.writeAsBytes(bytes);
       OpenFile.open(path);
     } catch (e) {
-      print('Error opening file: $e');
     }
   }
 
@@ -151,7 +150,7 @@ class PaymentsPageState extends State<PaymentsPage> {
           const SizedBox(height: 20),
           Text(
             'Total Revenue: $totalRevenue €',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ],
       ),

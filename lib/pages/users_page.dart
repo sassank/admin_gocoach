@@ -24,6 +24,7 @@ class UsersPageState extends State<UsersPage> {
       subscriptionEndDate: DateTime(2023, 1, 1),
       isActive: true,
       isPaymentUpToDate: true,
+      role: 'member',
     ),
     User(
       firstName: 'Jane',
@@ -37,6 +38,7 @@ class UsersPageState extends State<UsersPage> {
       subscriptionEndDate: DateTime(2023, 2, 1),
       isActive: true,
       isPaymentUpToDate: false,
+      role: 'coach',
     ),
     User(
       firstName: 'Jim',
@@ -50,6 +52,7 @@ class UsersPageState extends State<UsersPage> {
       subscriptionEndDate: DateTime(2023, 3, 1),
       isActive: false,
       isPaymentUpToDate: true,
+      role: 'admin',
     ),
   ];
 
@@ -116,6 +119,7 @@ class UsersPageState extends State<UsersPage> {
             DataColumn(label: Text('Fin d\'abonnement')),
             DataColumn(label: Text('Statut')),
             DataColumn(label: Text('Paiement')),
+            DataColumn(label: Text('Rôle')),
             DataColumn(label: Text('Actions')),
           ],
           rows: filteredUsers.map((user) {
@@ -160,6 +164,7 @@ class UsersPageState extends State<UsersPage> {
                     ),
                   ],
                 )),
+                DataCell(Text(user.role)),
                 DataCell(Row(
                   children: [
                     InkWell(
@@ -206,12 +211,14 @@ class UsersPageState extends State<UsersPage> {
     final emailController = TextEditingController(text: user.email);
     final subscriptionStartDateController = TextEditingController(text: user.subscriptionStartDate.toLocal().toString().split(' ')[0]);
     final subscriptionEndDateController = TextEditingController(text: user.subscriptionEndDate.toLocal().toString().split(' ')[0]);
+    final roleController = TextEditingController(text: user.role);
     bool isActive = user.isActive;
     bool isPaymentUpToDate = user.isPaymentUpToDate;
 
     showDialog(
       context: context,
       builder: (context) {
+        var role;
         return AlertDialog(
           title: const Text('Modifier l\'utilisateur'),
           content: SingleChildScrollView(
@@ -276,6 +283,22 @@ class UsersPageState extends State<UsersPage> {
                     }
                   },
                 ),
+                DropdownButtonFormField<String>(
+                  value: role,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      role = newValue!;
+                    });
+                  },
+                  items: <String>['member', 'coach', 'admin']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  decoration: const InputDecoration(labelText: 'Rôle'),
+                ),
                 Row(
                   children: [
                     const Text('Statut: '),
@@ -326,7 +349,8 @@ class UsersPageState extends State<UsersPage> {
                     phoneNumberController.text.isEmpty ||
                     emailController.text.isEmpty ||
                     subscriptionStartDateController.text.isEmpty ||
-                    subscriptionEndDateController.text.isEmpty) {
+                    subscriptionEndDateController.text.isEmpty ||
+                    roleController.text.isEmpty) { // Validation du champ de rôle
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Veuillez remplir tous les champs')),
                   );
@@ -344,6 +368,7 @@ class UsersPageState extends State<UsersPage> {
                   subscriptionEndDate: DateTime.parse(subscriptionEndDateController.text),
                   isActive: isActive,
                   isPaymentUpToDate: isPaymentUpToDate,
+                  role: roleController.text, // Mise à jour du rôle
                 ));
                 Navigator.of(context).pop();
               },
@@ -365,6 +390,7 @@ class UsersPageState extends State<UsersPage> {
     final emailController = TextEditingController();
     final subscriptionStartDateController = TextEditingController();
     final subscriptionEndDateController = TextEditingController();
+    final roleController = TextEditingController(); // Ajout du champ de rôle
     bool isActive = false;
     bool isPaymentUpToDate = false;
 
@@ -435,6 +461,10 @@ class UsersPageState extends State<UsersPage> {
                     }
                   },
                 ),
+                TextField(
+                  controller: roleController,
+                  decoration: const InputDecoration(labelText: 'Rôle'), // Ajout du champ de rôle
+                ),
                 Row(
                   children: [
                     const Text('Statut: '),
@@ -485,7 +515,8 @@ class UsersPageState extends State<UsersPage> {
                     phoneNumberController.text.isEmpty ||
                     emailController.text.isEmpty ||
                     subscriptionStartDateController.text.isEmpty ||
-                    subscriptionEndDateController.text.isEmpty) {
+                    subscriptionEndDateController.text.isEmpty ||
+                    roleController.text.isEmpty) { // Validation du champ de rôle
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Veuillez remplir tous les champs')),
                   );
@@ -503,6 +534,7 @@ class UsersPageState extends State<UsersPage> {
                   subscriptionEndDate: DateTime.parse(subscriptionEndDateController.text),
                   isActive: isActive,
                   isPaymentUpToDate: isPaymentUpToDate,
+                  role: roleController.text, // Ajout du rôle
                 ));
                 Navigator.of(context).pop();
               },
