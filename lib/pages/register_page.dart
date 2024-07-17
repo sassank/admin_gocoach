@@ -15,13 +15,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _subscriptionController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _postalCodeController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
-  String _selectedRole = 'member'; // Default role
 
   void _register() async {
     if (_emailController.text.isNotEmpty &&
@@ -35,13 +28,6 @@ class _RegisterPageState extends State<RegisterPage> {
         body: jsonEncode(<String, String>{
           'email': _emailController.text,
           'password': _passwordController.text,
-          'firstName': _firstNameController.text,
-          'lastName': _lastNameController.text,
-          'subscription': _subscriptionController.text,
-          'address': _addressController.text,
-          'postalCode': _postalCodeController.text,
-          'phoneNumber': _phoneNumberController.text,
-          'role': _selectedRole, // Include the role
         }),
       );
 
@@ -127,138 +113,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 30.0),
-                  // First name field
-                  SizedBox(
-                    width: 300,
-                    child: TextField(
-                      controller: _firstNameController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.person),
-                        labelText: 'Prénom',
-                        filled: true,
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Color(0xFF1d9172)),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black54),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Last name field
-                  SizedBox(
-                    width: 300,
-                    child: TextField(
-                      controller: _lastNameController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.person),
-                        labelText: 'Nom de famille',
-                        filled: true,
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Color(0xFF1d9172)),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black54),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Subscription field
-                  SizedBox(
-                    width: 300,
-                    child: TextField(
-                      controller: _subscriptionController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.card_membership),
-                        labelText: 'Abonnement',
-                        filled: true,
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Color(0xFF1d9172)),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black54),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Address field
-                  SizedBox(
-                    width: 300,
-                    child: TextField(
-                      controller: _addressController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.home),
-                        labelText: 'Adresse',
-                        filled: true,
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Color(0xFF1d9172)),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black54),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Postal code field
-                  SizedBox(
-                    width: 300,
-                    child: TextField(
-                      controller: _postalCodeController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.location_on),
-                        labelText: 'Code postal',
-                        filled: true,
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Color(0xFF1d9172)),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black54),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Phone number field
-                  SizedBox(
-                    width: 300,
-                    child: TextField(
-                      controller: _phoneNumberController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.phone),
-                        labelText: 'Téléphone',
-                        filled: true,
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Color(0xFF1d9172)),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black54),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                   // Email field
                   SizedBox(
                     width: 300,
@@ -324,40 +178,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                       obscureText: true,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Role dropdown
-                  SizedBox(
-                    width: 300,
-                    child: DropdownButtonFormField<String>(
-                      value: _selectedRole,
-                      items: <String>['member', 'coach', 'admin']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedRole = newValue!;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.person),
-                        labelText: 'Role',
-                        filled: true,
-                        fillColor: Colors.white,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Color(0xFF1d9172)),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black54),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
                     ),
                   ),
                   const SizedBox(height: 16),

@@ -1,1 +1,39 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"gocoachapp-d882a","appId":"1:203559158951:android:ff8d310c6459bb455d8782","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"gocoachapp-d882a","configurations":{"android":"1:203559158951:android:ff8d310c6459bb455d8782","ios":"1:203559158951:ios:32b97d7fc3b7d24f5d8782","macos":"1:203559158951:ios:32b97d7fc3b7d24f5d8782","web":"1:203559158951:web:579d00d6829fe8325d8782","windows":"1:203559158951:web:13dde69c7b1aaca95d8782"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "gocoachapp-d882a",
+          "appId": "1:203559158951:android:ff8d310c6459bb455d8782",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "gocoachapp-d882a",
+          "configurations": {
+            "android": "1:203559158951:android:ff8d310c6459bb455d8782",
+            "ios": "1:203559158951:ios:32b97d7fc3b7d24f5d8782",
+            "macos": "1:203559158951:ios:32b97d7fc3b7d24f5d8782",
+            "web": "1:203559158951:web:579d00d6829fe8325d8782",
+            "windows": "1:203559158951:web:13dde69c7b1aaca95d8782"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
